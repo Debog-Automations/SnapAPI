@@ -1,0 +1,26 @@
+{
+  "name": "snapapi",
+  "version": "1.0.0",
+  "description": "Screenshot & OG Image REST API",
+  "type": "module",
+  "main": "dist/index.js",
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "db:migrate": "tsx src/db/migrate.ts"
+  },
+  "dependencies": {
+    "@hono/node-server": "^1.13.2",
+    "better-sqlite3": "^9.6.0",
+    "hono": "^4.6.5",
+    "playwright": "^1.49.0",
+    "stripe": "^17.3.1"
+  },
+  "devDependencies": {
+    "@types/better-sqlite3": "^7.6.12",
+    "@types/node": "^22.10.0",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2"
+  }
+}

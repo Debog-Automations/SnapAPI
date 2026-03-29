@@ -1,0 +1,377 @@
+---
+import Base from '../layouts/Base.astro';
+---
+<Base>
+  <style>
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 40px;
+      border-bottom: 1px solid var(--border);
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .logo { font-size: 22px; font-weight: 800; color: var(--text); display: flex; align-items: center; gap: 10px; }
+    .logo span { color: var(--accent); }
+    .nav-links { display: flex; gap: 28px; align-items: center; }
+    .nav-links a { color: var(--muted); font-size: 15px; }
+    .nav-links a:hover { color: var(--text); text-decoration: none; }
+    .btn { display: inline-block; padding: 10px 22px; border-radius: 8px; font-weight: 600; font-size: 15px; cursor: pointer; transition: all 0.15s; }
+    .btn-primary { background: var(--accent); color: white; }
+    .btn-primary:hover { background: var(--accent-hover); text-decoration: none; }
+    .btn-outline { border: 1px solid var(--border); color: var(--text); }
+    .btn-outline:hover { background: var(--surface); text-decoration: none; }
+
+    .hero {
+      text-align: center;
+      padding: 100px 40px 80px;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    .badge {
+      display: inline-block;
+      background: rgba(99,102,241,0.15);
+      color: var(--accent-hover);
+      border: 1px solid rgba(99,102,241,0.3);
+      padding: 5px 14px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 28px;
+      letter-spacing: 0.04em;
+    }
+    h1 {
+      font-size: clamp(40px, 6vw, 72px);
+      font-weight: 900;
+      line-height: 1.1;
+      margin-bottom: 24px;
+      letter-spacing: -0.02em;
+    }
+    h1 span { color: var(--accent); }
+    .hero p {
+      font-size: 20px;
+      color: var(--muted);
+      max-width: 600px;
+      margin: 0 auto 40px;
+    }
+    .hero-cta { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+
+    .demo-code {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 28px;
+      max-width: 900px;
+      margin: 0 auto 80px;
+      text-align: left;
+      overflow-x: auto;
+    }
+    .demo-code pre { font-size: 14px; line-height: 1.7; color: #a5f3fc; }
+    .demo-code .comment { color: var(--muted); }
+    .demo-code .string { color: #86efac; }
+    .demo-code .keyword { color: #c4b5fd; }
+
+    section { max-width: 1200px; margin: 0 auto; padding: 60px 40px; }
+    h2 { font-size: 36px; font-weight: 800; margin-bottom: 12px; }
+    .section-sub { color: var(--muted); font-size: 18px; margin-bottom: 48px; }
+
+    .features { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; }
+    .feature-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 28px;
+    }
+    .feature-icon { font-size: 32px; margin-bottom: 16px; }
+    .feature-card h3 { font-size: 18px; font-weight: 700; margin-bottom: 8px; }
+    .feature-card p { color: var(--muted); font-size: 15px; }
+
+    .pricing-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 24px; }
+    .pricing-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 36px;
+      position: relative;
+    }
+    .pricing-card.featured {
+      border-color: var(--accent);
+      background: linear-gradient(180deg, rgba(99,102,241,0.1) 0%, var(--surface) 100%);
+    }
+    .popular-badge {
+      position: absolute; top: -12px; left: 50%; transform: translateX(-50%);
+      background: var(--accent); color: white; font-size: 12px; font-weight: 700;
+      padding: 3px 14px; border-radius: 999px; letter-spacing: 0.05em;
+    }
+    .plan-name { font-size: 14px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px; }
+    .plan-price { font-size: 48px; font-weight: 900; margin-bottom: 4px; }
+    .plan-price span { font-size: 20px; font-weight: 400; color: var(--muted); }
+    .plan-limit { color: var(--muted); font-size: 15px; margin-bottom: 28px; }
+    .plan-features { list-style: none; margin-bottom: 32px; }
+    .plan-features li { padding: 6px 0; font-size: 15px; display: flex; gap: 10px; }
+    .plan-features li::before { content: '✓'; color: var(--green); font-weight: 700; }
+
+    .endpoints-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+    @media (max-width: 700px) { .endpoints-grid { grid-template-columns: 1fr; } }
+    .endpoint-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 28px;
+    }
+    .endpoint-method {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 5px;
+      font-size: 13px;
+      font-weight: 700;
+      margin-right: 8px;
+      font-family: monospace;
+    }
+    .get { background: rgba(34,197,94,0.15); color: var(--green); }
+    .post { background: rgba(99,102,241,0.15); color: var(--accent-hover); }
+    .endpoint-path { font-family: monospace; font-size: 15px; }
+    .endpoint-card p { color: var(--muted); font-size: 14px; margin-top: 12px; }
+    .endpoint-params { margin-top: 16px; }
+    .param { display: flex; gap: 12px; font-size: 13px; padding: 6px 0; border-top: 1px solid var(--border); }
+    .param-name { font-family: monospace; color: var(--accent-hover); min-width: 100px; }
+    .param-desc { color: var(--muted); }
+
+    .signup-section {
+      background: linear-gradient(135deg, rgba(99,102,241,0.15) 0%, rgba(99,102,241,0.05) 100%);
+      border: 1px solid rgba(99,102,241,0.3);
+      border-radius: 20px;
+      padding: 60px;
+      text-align: center;
+      margin: 0 40px 80px;
+    }
+    .signup-section h2 { margin-bottom: 12px; }
+    .signup-section p { color: var(--muted); font-size: 18px; margin-bottom: 32px; }
+    .signup-form { display: flex; gap: 12px; max-width: 480px; margin: 0 auto; flex-wrap: wrap; }
+    .signup-form input {
+      flex: 1;
+      padding: 12px 16px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text);
+      font-size: 15px;
+      min-width: 200px;
+    }
+    .signup-form input::placeholder { color: var(--muted); }
+    .signup-form input:focus { outline: none; border-color: var(--accent); }
+
+    footer {
+      border-top: 1px solid var(--border);
+      text-align: center;
+      padding: 32px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+  </style>
+
+  <nav>
+    <div class="logo">Snap<span>API</span></div>
+    <div class="nav-links">
+      <a href="#features">Features</a>
+      <a href="#docs">Docs</a>
+      <a href="#pricing">Pricing</a>
+      <a href="/get-started" class="btn btn-primary">Get API Key</a>
+    </div>
+  </nav>
+
+  <div class="hero">
+    <div class="badge">🚀 Now in Beta — Free tier available</div>
+    <h1>Screenshot & OG Image API<br><span>for Developers</span></h1>
+    <p>Capture web screenshots and generate beautiful Open Graph images with a single API call. No servers to manage.</p>
+    <div class="hero-cta">
+      <a href="/get-started" class="btn btn-primary">Get Free API Key</a>
+      <a href="#docs" class="btn btn-outline">View Docs</a>
+    </div>
+  </div>
+
+  <div class="demo-code">
+    <pre><span class="comment"># Capture a screenshot</span>
+curl <span class="string">"https://api.snapapi.dev/v1/screenshot?url=https://example.com&width=1280&height=720"</span> \
+  -H <span class="string">"Authorization: Bearer snap_your_api_key"</span> \
+  --output screenshot.png
+
+<span class="comment"># Generate an OG image</span>
+curl -X POST <span class="string">"https://api.snapapi.dev/v1/og-image"</span> \
+  -H <span class="string">"Authorization: Bearer snap_your_api_key"</span> \
+  -H <span class="string">"Content-Type: application/json"</span> \
+  -d <span class="string">'{"template":"default","data":{"title":"My Article","description":"A great read"}}'</span> \
+  --output og.png</pre>
+  </div>
+
+  <section id="features">
+    <h2>Everything you need</h2>
+    <p class="section-sub">Simple, reliable, and fast — built for developers.</p>
+    <div class="features">
+      <div class="feature-card">
+        <div class="feature-icon">📸</div>
+        <h3>Web Screenshots</h3>
+        <p>Full-page or viewport screenshots with Playwright. Supports any public URL, custom dimensions, and JPEG/PNG output.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🖼️</div>
+        <h3>OG Image Templates</h3>
+        <p>Pre-built templates for blog posts, landing pages, and apps. Customize colors, fonts, and layout with simple JSON.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🔑</div>
+        <h3>API Key Auth</h3>
+        <p>Simple bearer token authentication. Create a key in seconds, no email verification or credit card required to start.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">📊</div>
+        <h3>Usage Tracking</h3>
+        <p>Track your API usage in real-time. Usage resets every month. Upgrade or downgrade anytime.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">⚡</div>
+        <h3>Fast & Reliable</h3>
+        <p>Powered by headless Chromium via Playwright. Requests typically complete in under 2 seconds.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">💳</div>
+        <h3>Simple Pricing</h3>
+        <p>Free tier with 100 requests/month. No hidden fees, no setup costs. Upgrade only when you need more.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="docs">
+    <h2>API Reference</h2>
+    <p class="section-sub">Two endpoints. That's it.</p>
+    <div class="endpoints-grid">
+      <div class="endpoint-card">
+        <div>
+          <span class="endpoint-method get">GET</span>
+          <span class="endpoint-path">/v1/screenshot</span>
+        </div>
+        <p>Capture a screenshot of any public URL and return it as a PNG or JPEG image.</p>
+        <div class="endpoint-params">
+          <div class="param"><span class="param-name">url</span><span class="param-desc">Required. The URL to screenshot.</span></div>
+          <div class="param"><span class="param-name">width</span><span class="param-desc">Viewport width in px (default: 1280, max: 2560)</span></div>
+          <div class="param"><span class="param-name">height</span><span class="param-desc">Viewport height in px (default: 720, max: 2560)</span></div>
+          <div class="param"><span class="param-name">format</span><span class="param-desc">png or jpeg (default: png)</span></div>
+          <div class="param"><span class="param-name">full_page</span><span class="param-desc">true to capture full scrollable page</span></div>
+          <div class="param"><span class="param-name">delay</span><span class="param-desc">Wait ms after load (max: 5000)</span></div>
+          <div class="param"><span class="param-name">quality</span><span class="param-desc">JPEG quality 1-100 (default: 85)</span></div>
+        </div>
+      </div>
+      <div class="endpoint-card">
+        <div>
+          <span class="endpoint-method post">POST</span>
+          <span class="endpoint-path">/v1/og-image</span>
+        </div>
+        <p>Generate an Open Graph image (1200×630px) from a template and data. Returns PNG or JPEG.</p>
+        <div class="endpoint-params">
+          <div class="param"><span class="param-name">template</span><span class="param-desc">default or article</span></div>
+          <div class="param"><span class="param-name">data.title</span><span class="param-desc">Required. Main heading text.</span></div>
+          <div class="param"><span class="param-name">data.description</span><span class="param-desc">Subtitle or excerpt text.</span></div>
+          <div class="param"><span class="param-name">data.logo</span><span class="param-desc">URL of a logo image (default template)</span></div>
+          <div class="param"><span class="param-name">data.author</span><span class="param-desc">Author name (article template)</span></div>
+          <div class="param"><span class="param-name">data.accentColor</span><span class="param-desc">Hex color for accents (e.g. #6366f1)</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="pricing">
+    <h2>Simple pricing</h2>
+    <p class="section-sub">Start free. Upgrade when you need more.</p>
+    <div class="pricing-grid">
+      <div class="pricing-card">
+        <div class="plan-name">Free</div>
+        <div class="plan-price">$0<span>/mo</span></div>
+        <div class="plan-limit">100 requests / month</div>
+        <ul class="plan-features">
+          <li>Screenshot endpoint</li>
+          <li>OG image generation</li>
+          <li>2 templates</li>
+          <li>PNG & JPEG output</li>
+          <li>Usage dashboard</li>
+        </ul>
+        <a href="/get-started" class="btn btn-outline" style="width:100%;text-align:center;display:block">Get Started Free</a>
+      </div>
+      <div class="pricing-card featured">
+        <div class="popular-badge">MOST POPULAR</div>
+        <div class="plan-name">Starter</div>
+        <div class="plan-price">$9<span>/mo</span></div>
+        <div class="plan-limit">5,000 requests / month</div>
+        <ul class="plan-features">
+          <li>Everything in Free</li>
+          <li>50× more requests</li>
+          <li>Priority support</li>
+          <li>Usage analytics</li>
+        </ul>
+        <a href="/get-started?plan=starter" class="btn btn-primary" style="width:100%;text-align:center;display:block">Upgrade to Starter</a>
+      </div>
+      <div class="pricing-card">
+        <div class="plan-name">Pro</div>
+        <div class="plan-price">$29<span>/mo</span></div>
+        <div class="plan-limit">25,000 requests / month</div>
+        <ul class="plan-features">
+          <li>Everything in Starter</li>
+          <li>250× more requests</li>
+          <li>Batch endpoint (coming soon)</li>
+          <li>Custom templates (coming soon)</li>
+        </ul>
+        <a href="/get-started?plan=pro" class="btn btn-outline" style="width:100%;text-align:center;display:block">Upgrade to Pro</a>
+      </div>
+    </div>
+  </section>
+
+  <div class="signup-section" id="get-started">
+    <h2>Get your free API key</h2>
+    <p>No credit card required. 100 requests/month, forever free.</p>
+    <form class="signup-form" id="signup-form">
+      <input type="text" placeholder="Your name" id="name-input" required />
+      <input type="email" placeholder="your@email.com" id="email-input" required />
+      <button type="submit" class="btn btn-primary">Get API Key</button>
+    </form>
+    <div id="signup-result" style="margin-top:20px;font-family:monospace;font-size:14px;"></div>
+  </div>
+
+  <script>
+    const form = document.getElementById('signup-form');
+    const result = document.getElementById('signup-result');
+
+    form?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const name = (document.getElementById('name-input') as HTMLInputElement).value;
+      const email = (document.getElementById('email-input') as HTMLInputElement).value;
+
+      (result as HTMLElement).textContent = 'Creating your API key...';
+
+      try {
+        const res = await fetch('https://api.snapapi.dev/v1/keys/create', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name, email }),
+        });
+        const data = await res.json();
+
+        if (res.ok) {
+          (result as HTMLElement).innerHTML = `
+            <div style="background:#0f2218;border:1px solid #22c55e;padding:20px;border-radius:10px;text-align:left;">
+              <div style="color:#22c55e;margin-bottom:12px;font-weight:700;">✓ API Key Created!</div>
+              <div style="color:#94a3b8;margin-bottom:6px;">Your API key (save this — it won't be shown again):</div>
+              <div style="background:#0a1a10;padding:12px;border-radius:6px;word-break:break-all;color:#86efac;">${data.api_key}</div>
+            </div>`;
+        } else {
+          (result as HTMLElement).innerHTML = `<div style="color:#f87171;">Error: ${data.error}</div>`;
+        }
+      } catch {
+        (result as HTMLElement).innerHTML = '<div style="color:#f87171;">Request failed. Please try again.</div>';
+      }
+    });
+  </script>
+
+  <footer>
+    <p>SnapAPI &copy; {new Date().getFullYear()} &mdash; Built with Playwright &amp; Hono &mdash; <a href="mailto:hello@snapapi.dev">hello@snapapi.dev</a></p>
+  </footer>
+</Base>

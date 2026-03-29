@@ -1,0 +1,106 @@
+---
+import Base from '../layouts/Base.astro';
+---
+<Base title="Get Started — SnapAPI" description="Create your free SnapAPI key and start capturing screenshots in minutes.">
+  <style>
+    .container { max-width: 600px; margin: 80px auto; padding: 0 24px; text-align: center; }
+    h1 { font-size: 42px; font-weight: 900; margin-bottom: 12px; }
+    .sub { color: #94a3b8; font-size: 18px; margin-bottom: 48px; }
+    .card {
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 16px;
+      padding: 40px;
+      text-align: left;
+    }
+    .form-group { margin-bottom: 20px; }
+    label { display: block; font-size: 14px; font-weight: 600; color: #94a3b8; margin-bottom: 6px; }
+    input {
+      width: 100%;
+      padding: 12px 16px;
+      background: #0f172a;
+      border: 1px solid #334155;
+      border-radius: 8px;
+      color: #f1f5f9;
+      font-size: 16px;
+    }
+    input:focus { outline: none; border-color: #6366f1; }
+    input::placeholder { color: #475569; }
+    .btn { display: block; width: 100%; padding: 14px; background: #6366f1; color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: 700; cursor: pointer; }
+    .btn:hover { background: #818cf8; }
+    .result-box { margin-top: 28px; }
+    .back { display: block; margin-top: 24px; color: #94a3b8; font-size: 14px; text-align: center; }
+  </style>
+
+  <div class="container">
+    <a href="/" style="color:#6366f1;font-size:14px;">&larr; Back to SnapAPI</a>
+    <h1 style="margin-top:32px;">Get your API key</h1>
+    <p class="sub">Free tier — 100 requests/month, no credit card needed.</p>
+    <div class="card">
+      <form id="signup-form">
+        <div class="form-group">
+          <label for="name">Your name</label>
+          <input type="text" id="name" placeholder="Jane Smith" required />
+        </div>
+        <div class="form-group">
+          <label for="email">Email address</label>
+          <input type="email" id="email" placeholder="jane@example.com" required />
+        </div>
+        <button type="submit" class="btn">Create API Key</button>
+      </form>
+      <div class="result-box" id="result"></div>
+    </div>
+    <a class="back" href="/#pricing">Need more than 100/month? View pricing &rarr;</a>
+  </div>
+
+  <script>
+    const form = document.getElementById('signup-form') as HTMLFormElement;
+    const result = document.getElementById('result') as HTMLElement;
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const name = (document.getElementById('name') as HTMLInputElement).value;
+      const email = (document.getElementById('email') as HTMLInputElement).value;
+
+      const btn = form.querySelector('button') as HTMLButtonElement;
+      btn.textContent = 'Creating...';
+      btn.disabled = true;
+
+      try {
+        const res = await fetch('https://api.snapapi.dev/v1/keys/create', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name, email }),
+        });
+        const data = await res.json();
+
+        if (res.ok) {
+          form.style.display = 'none';
+          result.innerHTML = `
+            <div style="background:#0f2218;border:1px solid #22c55e;padding:24px;border-radius:10px;">
+              <div style="color:#22c55e;font-size:20px;font-weight:800;margin-bottom:16px;">✓ Your API key is ready!</div>
+              <div style="color:#94a3b8;font-size:14px;margin-bottom:10px;">Copy and store it safely — it won't be shown again:</div>
+              <div style="background:#0a1a10;padding:14px;border-radius:8px;word-break:break-all;color:#86efac;font-family:monospace;font-size:14px;cursor:pointer;" onclick="navigator.clipboard.writeText('${data.api_key}')" title="Click to copy">
+                ${data.api_key}
+                <span style="color:#475569;font-size:12px;margin-left:8px;">(click to copy)</span>
+              </div>
+              <div style="margin-top:20px;color:#64748b;font-size:14px;">
+                <strong style="color:#94a3b8;">Plan:</strong> Free &mdash; <strong style="color:#94a3b8;">Limit:</strong> 100 requests/month
+              </div>
+              <div style="margin-top:20px;">
+                <a href="/#docs" style="color:#818cf8;font-size:14px;">View API docs &rarr;</a>
+              </div>
+            </div>`;
+        } else {
+          result.innerHTML = `<div style="color:#f87171;padding:12px;background:#200;border-radius:8px;">Error: ${data.error}</div>`;
+          btn.textContent = 'Create API Key';
+          btn.disabled = false;
+        }
+      } catch {
+        result.innerHTML = '<div style="color:#f87171;padding:12px;background:#200;border-radius:8px;">Request failed. Please try again.</div>';
+        btn.textContent = 'Create API Key';
+        btn.disabled = false;
+      }
+    });
+  </script>
+</Base>
