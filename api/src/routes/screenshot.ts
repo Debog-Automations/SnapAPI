@@ -49,7 +49,7 @@ app.get('/', async (c) => {
     });
 
     const contentType = format === 'jpeg' ? 'image/jpeg' : 'image/png';
-    return new Response(screenshot, {
+    return new Response(new Uint8Array(screenshot), {
       headers: {
         'Content-Type': contentType,
         'Cache-Control': 'public, max-age=3600',

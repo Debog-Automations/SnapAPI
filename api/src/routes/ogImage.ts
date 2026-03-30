@@ -33,7 +33,7 @@ app.post('/', async (c) => {
 
   const format = body.format === 'jpeg' ? 'jpeg' : 'png';
   const renderFn = TEMPLATES[template as TemplateName];
-  const html = renderFn(data as OgDefaultData & OgArticleData);
+  const html = renderFn(data as unknown as OgDefaultData & OgArticleData);
 
   const browser = await getBrowser();
   const page = await browser.newPage();
@@ -48,7 +48,7 @@ app.post('/', async (c) => {
     });
 
     const contentType = format === 'jpeg' ? 'image/jpeg' : 'image/png';
-    return new Response(screenshot, {
+    return new Response(new Uint8Array(screenshot), {
       headers: {
         'Content-Type': contentType,
         'Cache-Control': 'public, max-age=86400',

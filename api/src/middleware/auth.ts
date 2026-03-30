@@ -17,9 +17,6 @@ export async function authMiddleware(c: Context, next: Next): Promise<void> {
   const rawKey = authHeader?.startsWith('Bearer ') ? authHeader.slice(7) : queryKey;
 
   if (!rawKey) {
-    c.status(401);
-    await c.res.json?.({ error: 'API key required. Pass via Authorization: Bearer <key> or ?api_key=<key>' });
-    // Return a proper response
     c.res = new Response(JSON.stringify({ error: 'API key required. Pass via Authorization: Bearer <key> or ?api_key=<key>' }), {
       status: 401,
       headers: { 'Content-Type': 'application/json' },
