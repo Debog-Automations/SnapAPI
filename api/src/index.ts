@@ -24,24 +24,23 @@ app.use('*', secureHeaders());
 // Health check (no auth)
 app.get('/health', (c) => c.json({ status: 'ok', version: '1.0.0', timestamp: new Date().toISOString() }));
 
-// Public routes
-app.route('/v1/keys', keysRoute);
-
 // Stripe webhook (no auth, raw body needed)
 app.post('/v1/billing/webhook', async (c) => {
   const { default: billingApp } = await import('./routes/billing.js');
   return billingApp.fetch(c.req.raw);
 });
 
-// Protected routes
+// Protected routes — auth middleware registered before route handlers
 app.use('/v1/screenshot', authMiddleware);
 app.use('/v1/og-image', authMiddleware);
-app.use('/v1/keys/me', authMiddleware);
 app.use('/v1/billing/checkout', authMiddleware);
 
 app.route('/v1/screenshot', screenshotRoute);
 app.route('/v1/og-image', ogImageRoute);
 app.route('/v1/billing', billingRoute);
+
+// Keys: /create is public, /me requires auth (middleware applied inside keysRoute)
+app.route('/v1/keys', keysRoute);
 
 // 404 handler
 app.notFound((c) => c.json({ error: 'Not found' }, 404));

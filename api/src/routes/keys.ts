@@ -2,8 +2,12 @@ import { Hono } from 'hono';
 import { createApiKey } from '../lib/apiKeys.js';
 import { PLANS } from '../db/schema.js';
 import { getDb } from '../db/index.js';
+import { authMiddleware } from '../middleware/auth.js';
 
 const app = new Hono();
+
+// /me requires auth — middleware applied before the route handler
+app.use('/me', authMiddleware);
 
 // Create a new API key (sign-up endpoint)
 app.post('/create', async (c) => {
