@@ -22,7 +22,7 @@ app.use('*', cors({
 app.use('*', secureHeaders());
 
 // Health check (no auth)
-app.get('/health', (c) => c.json({ status: 'ok', version: '1.0.0', timestamp: new Date().toISOString() }));
+app.get('/health', (c) => c.json({ status: 'ok', version: '1.0.3', timestamp: new Date().toISOString() }));
 
 // Stripe webhook (no auth, raw body needed)
 app.post('/v1/billing/webhook', async (c) => {
