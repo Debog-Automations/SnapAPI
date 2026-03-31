@@ -1,13 +1,9 @@
 import { Hono } from 'hono';
-import { createApiKey } from '../lib/apiKeys.js';
+import { createApiKey, lookupApiKey } from '../lib/apiKeys.js';
 import { PLANS } from '../db/schema.js';
 import { getDb } from '../db/index.js';
-import { authMiddleware } from '../middleware/auth.js';
 
 const app = new Hono();
-
-// /me requires auth — middleware applied before the route handler
-app.use('/me', authMiddleware);
 
 // Create a new API key (sign-up endpoint)
 app.post('/create', async (c) => {
@@ -46,14 +42,25 @@ app.post('/create', async (c) => {
   }, 201);
 });
 
-// Get current key info (requires auth)
+// Get current key info (requires auth — validated inline)
 app.get('/me', async (c) => {
-  const apiKey = c.get('apiKey');
-  const db = getDb();
+  const authHeader = c.req.header('Authorization');
+  const queryKey = c.req.query('api_key');
+  const rawKey = authHeader?.startsWith('Bearer ') ? authHeader.slice(7) : queryKey;
 
+  if (!rawKey) {
+    return c.json({ error: 'API key required' }, 401);
+  }
+
+  const apiKey = lookupApiKey(rawKey);
+  if (!apiKey) {
+    return c.json({ error: 'Invalid API key' }, 401);
+  }
+
+  const db = getDb();
   const usageLogs = db.prepare(`
     SELECT COUNT(*) as count FROM usage_logs
-    WHERE api_key_id = ? AND created_at >= date('now', 'start of month')
+    WHERE api_key_id = ? AND created_at >= strftime('%Y-%m-01', 'now')
   `).get(apiKey.id) as { count: number };
 
   return c.json({
