@@ -6,7 +6,7 @@ import Base from '../layouts/Base.astro';
   <style>
     .container { max-width: 600px; margin: 80px auto; padding: 0 24px; text-align: center; }
     h1 { font-size: 42px; font-weight: 900; margin-bottom: 12px; }
-    .sub { color: #94a3b8; font-size: 18px; margin-bottom: 48px; }
+    .sub { color: #9db4c8; font-size: 18px; margin-bottom: 48px; }
     .card {
       background: #1e293b;
       border: 1px solid #334155;
@@ -15,7 +15,7 @@ import Base from '../layouts/Base.astro';
       text-align: left;
     }
     .form-group { margin-bottom: 20px; }
-    label { display: block; font-size: 14px; font-weight: 600; color: #94a3b8; margin-bottom: 6px; }
+    label { display: block; font-size: 14px; font-weight: 600; color: #9db4c8; margin-bottom: 6px; }
     input {
       width: 100%;
       padding: 12px 16px;
@@ -25,16 +25,16 @@ import Base from '../layouts/Base.astro';
       color: #f1f5f9;
       font-size: 16px;
     }
-    input:focus { outline: none; border-color: #6366f1; }
+    input:focus { outline: none; border-color: #06b6d4; }
     input::placeholder { color: #475569; }
-    .btn { display: block; width: 100%; padding: 14px; background: #6366f1; color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: 700; cursor: pointer; }
-    .btn:hover { background: #818cf8; }
+    .btn { display: block; width: 100%; padding: 14px; background: #06b6d4; color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: 700; cursor: pointer; }
+    .btn:hover { background: #22d3ee; }
     .result-box { margin-top: 28px; }
-    .back { display: block; margin-top: 24px; color: #94a3b8; font-size: 14px; text-align: center; }
+    .back { display: block; margin-top: 24px; color: #9db4c8; font-size: 14px; text-align: center; }
   </style>
 
   <div class="container">
-    <a href="/" style="color:#6366f1;font-size:14px;">&larr; Back to SnapAPI</a>
+    <a href="/" style="color:#06b6d4;font-size:14px;">&larr; Back to SnapAPI</a>
     <h1 style="margin-top:32px;">Get your API key</h1>
     <p class="sub">Free tier — 100 requests/month, no credit card needed.</p>
     <div class="card">
@@ -69,7 +69,7 @@ import Base from '../layouts/Base.astro';
       btn.disabled = true;
 
       try {
-        const res = await fetch('https://api.snapapi.dev/v1/keys/create', {
+        const res = await fetch('/api/keys/create', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ name, email }),
@@ -79,18 +79,18 @@ import Base from '../layouts/Base.astro';
         if (res.ok) {
           form.style.display = 'none';
           result.innerHTML = `
-            <div style="background:#0f2218;border:1px solid #22c55e;padding:24px;border-radius:10px;">
-              <div style="color:#22c55e;font-size:20px;font-weight:800;margin-bottom:16px;">✓ Your API key is ready!</div>
-              <div style="color:#94a3b8;font-size:14px;margin-bottom:10px;">Copy and store it safely — it won't be shown again:</div>
-              <div style="background:#0a1a10;padding:14px;border-radius:8px;word-break:break-all;color:#86efac;font-family:monospace;font-size:14px;cursor:pointer;" onclick="navigator.clipboard.writeText('${data.api_key}')" title="Click to copy">
+            <div style="background:#071a12;border:1px solid #10b981;padding:24px;border-radius:10px;">
+              <div style="color:#10b981;font-size:20px;font-weight:800;margin-bottom:16px;">API key ready</div>
+              <div style="color:#9db4c8;font-size:14px;margin-bottom:10px;">Copy and store it safely — it won't be shown again:</div>
+              <div style="background:#040e0a;padding:14px;border-radius:8px;word-break:break-all;color:#6ee7b7;font-family:monospace;font-size:14px;cursor:pointer;" onclick="navigator.clipboard.writeText('${data.api_key}')" title="Click to copy">
                 ${data.api_key}
                 <span style="color:#475569;font-size:12px;margin-left:8px;">(click to copy)</span>
               </div>
               <div style="margin-top:20px;color:#64748b;font-size:14px;">
-                <strong style="color:#94a3b8;">Plan:</strong> Free &mdash; <strong style="color:#94a3b8;">Limit:</strong> 100 requests/month
+                <strong style="color:#9db4c8;">Plan:</strong> Free &mdash; <strong style="color:#9db4c8;">Limit:</strong> 100 requests/month
               </div>
               <div style="margin-top:20px;">
-                <a href="/#docs" style="color:#818cf8;font-size:14px;">View API docs &rarr;</a>
+                <a href="/#docs" style="color:#22d3ee;font-size:14px;">View API docs &rarr;</a>
               </div>
             </div>`;
         } else {
