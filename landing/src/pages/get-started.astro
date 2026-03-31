@@ -54,15 +54,16 @@ import Base from '../layouts/Base.astro';
   </div>
 
   <script>
-    const form = document.getElementById('signup-form') as HTMLFormElement;
-    const result = document.getElementById('result') as HTMLElement;
+    const form = document.getElementById('signup-form');
+    const result = document.getElementById('result');
 
-    form.addEventListener('submit', async (e) => {
+    if (form && result) {
+    form.addEventListener('submit', async function(e) {
       e.preventDefault();
-      const name = (document.getElementById('name') as HTMLInputElement).value;
-      const email = (document.getElementById('email') as HTMLInputElement).value;
+      const name = document.getElementById('name').value;
+      const email = document.getElementById('email').value;
 
-      const btn = form.querySelector('button') as HTMLButtonElement;
+      const btn = form.querySelector('button');
       btn.textContent = 'Creating...';
       btn.disabled = true;
 
@@ -92,15 +93,16 @@ import Base from '../layouts/Base.astro';
               </div>
             </div>`;
         } else {
-          result.innerHTML = `<div style="color:#f87171;padding:12px;background:#200;border-radius:8px;">Error: ${data.error}</div>`;
+          result.innerHTML = '<div style="color:#f87171;padding:12px;background:#200;border-radius:8px;">Error: ' + data.error + '</div>';
           btn.textContent = 'Create API Key';
           btn.disabled = false;
         }
-      } catch {
+      } catch (err) {
         result.innerHTML = '<div style="color:#f87171;padding:12px;background:#200;border-radius:8px;">Request failed. Please try again.</div>';
         btn.textContent = 'Create API Key';
         btn.disabled = false;
       }
     });
+    }
   </script>
 </Base>

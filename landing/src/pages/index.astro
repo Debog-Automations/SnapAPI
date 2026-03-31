@@ -340,35 +340,37 @@ curl -X POST <span class="string">"https://api.snapapi.dev/v1/og-image"</span> \
     const form = document.getElementById('signup-form');
     const result = document.getElementById('signup-result');
 
-    form?.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const name = (document.getElementById('name-input') as HTMLInputElement).value;
-      const email = (document.getElementById('email-input') as HTMLInputElement).value;
+    if (form && result) {
+      form.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        const name = document.getElementById('name-input').value;
+        const email = document.getElementById('email-input').value;
 
-      (result as HTMLElement).textContent = 'Creating your API key...';
+        result.textContent = 'Creating your API key...';
 
-      try {
-        const res = await fetch('https://api.snapapi.dev/v1/keys/create', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ name, email }),
-        });
-        const data = await res.json();
+        try {
+          const res = await fetch('https://api.snapapi.dev/v1/keys/create', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ name, email }),
+          });
+          const data = await res.json();
 
-        if (res.ok) {
-          (result as HTMLElement).innerHTML = `
-            <div style="background:#0f2218;border:1px solid #22c55e;padding:20px;border-radius:10px;text-align:left;">
-              <div style="color:#22c55e;margin-bottom:12px;font-weight:700;">✓ API Key Created!</div>
-              <div style="color:#94a3b8;margin-bottom:6px;">Your API key (save this — it won't be shown again):</div>
-              <div style="background:#0a1a10;padding:12px;border-radius:6px;word-break:break-all;color:#86efac;">${data.api_key}</div>
-            </div>`;
-        } else {
-          (result as HTMLElement).innerHTML = `<div style="color:#f87171;">Error: ${data.error}</div>`;
+          if (res.ok) {
+            result.innerHTML = `
+              <div style="background:#0f2218;border:1px solid #22c55e;padding:20px;border-radius:10px;text-align:left;">
+                <div style="color:#22c55e;margin-bottom:12px;font-weight:700;">✓ API Key Created!</div>
+                <div style="color:#94a3b8;margin-bottom:6px;">Your API key (save this — it won't be shown again):</div>
+                <div style="background:#0a1a10;padding:12px;border-radius:6px;word-break:break-all;color:#86efac;">${data.api_key}</div>
+              </div>`;
+          } else {
+            result.innerHTML = '<div style="color:#f87171;">Error: ' + data.error + '</div>';
+          }
+        } catch (err) {
+          result.innerHTML = '<div style="color:#f87171;">Request failed. Please try again.</div>';
         }
-      } catch {
-        (result as HTMLElement).innerHTML = '<div style="color:#f87171;">Request failed. Please try again.</div>';
-      }
-    });
+      });
+    }
   </script>
 
   <footer>
