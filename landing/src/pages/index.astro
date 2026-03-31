@@ -1,4 +1,5 @@
 ---
+export const prerender = true;
 import Base from '../layouts/Base.astro';
 ---
 <Base>
@@ -349,7 +350,7 @@ curl -X POST <span class="string">"https://api.snapapi.dev/v1/og-image"</span> \
         result.textContent = 'Creating your API key...';
 
         try {
-          const res = await fetch('https://api.snapapi.dev/v1/keys/create', {
+          const res = await fetch('/api/keys/create', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ name, email }),
